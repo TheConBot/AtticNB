@@ -1,0 +1,18 @@
+.cover {
+  padding: 0 1.5rem;
+}
+.cover .btn-lg {
+  padding: .75rem 1.25rem;
+  font-weight: bold;
+}
+.inner {
+  padding: 2rem;
+}
+.input-padding{
+    padding-right: 1rem;
+}
+
+.body-left{
+    display: inline-block;
+    padding-top: 25px;
+}
