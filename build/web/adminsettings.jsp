@@ -1,5 +1,5 @@
 <%-- 
-    Document   : index
+    Document   : adminsettings
     Created on : Oct 16, 2017, 9:14:11 PM
     Author     : Connor
 --%>

@@ -16,3 +16,46 @@
     display: inline-block;
     padding-top: 25px;
 }
+
+.index-footer{
+    background-color: #343A40;
+    height: 10%;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    color: white;
+}
+
+.index-header{
+    background-color: #343A40;
+    height: 10%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+}
+
+#login-box{
+    position: relative;
+    height: 500px;
+    width: 30%;
+    top: 20%;
+    margin: 0 auto;
+    padding: 20px;
+    resize: both;
+    overflow: auto;
+}
+
+.login-field{
+    padding: 20px;
+}
+
+.index-border-item{
+    display:block;
+    margin-left: auto;
+    margin-right: auto;
+    position: relative;
+    top: 30%;
+}
+

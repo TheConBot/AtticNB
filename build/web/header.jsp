@@ -29,7 +29,7 @@
                         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                             <a class="dropdown-item" href="#">Property Settings</a>
                             <a class="dropdown-item" href="#">User Settings</a>
-                            <a class="dropdown-item" href="#">Admin Settings</a>                        
+                            <a class="dropdown-item" href="#" id="adminsettings">Admin Settings</a>                        
                             <a class="dropdown-item" href="#">Log Out</a>
                         </div>
                     </li>

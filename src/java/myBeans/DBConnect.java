@@ -65,8 +65,8 @@ public class DBConnect {
   }
 
   // Business logic: Method to display query as html table
-  public String htmlTable(String sql, String style) {
-    String result = "<div class = '" + style + "'><table>\n";
+  public String htmlTable(String sql) {
+    String result = "<table>\n";
     String message = open();
     if (message.equals("Opened")) {
       try {
@@ -74,13 +74,12 @@ public class DBConnect {
         rsmd = rst.getMetaData();
         int count = rsmd.getColumnCount();
         // create column headings
-        result += "<thead><tr>\n";
+        result += "<tr>\n";
         for (int i = 0; i < count; i++) {
           result += "<th>" + rsmd.getColumnName(i + 1) + "</th>\n";
         }
-        result += "</tr></thead>\n";
+        result += "</tr>\n";
         // create data rows
-        result += "<tbody>\n";
         while (rst.next()) {
           result += "<tr>\n";
           for (int i = 0; i < count; i++) {
@@ -88,11 +87,10 @@ public class DBConnect {
           }
           result += "</tr>\n";
         }
-        result += "</tbody></table></div>\n";
-        close();
+        result += "</table>\n";
+        message = close();
         return result;
       } catch (Exception e) {
-        close();
         return e.getMessage();
       }
     } else {
@@ -100,31 +98,9 @@ public class DBConnect {
     }
   }
 
-  // temporary password verification method
-  public boolean validatePwd(String sql) {
-    String message = open();
-    int count = 0;
-    if (message.equals("Opened")) {
-      try {
-        rst = stm.executeQuery(sql);
-        while (rst.next()) {
-          count++;
-        }
-        message = close();
-      } catch (Exception e) {
-        message = e.getMessage();
-      }
-    }
-    if (count == 0) {
-      return false;
-    } else {
-      return true;
-    }
-  }
-
   // Business logic: Method to verify password. Avoids SQL injection
   public String isPwdValid(String sql, String user, String pwd) {
-    String result = "no";
+    String result = "Error: ";
     String message = open();
     if (message.equals("Opened")) {
       try {
@@ -133,9 +109,36 @@ public class DBConnect {
         pstm.setString(2, pwd);
         rst = pstm.executeQuery();
         if (rst.next()) {
-          result = "yes";
+          result = rst.getString(3);
         }
-        close();
+      } catch (Exception e) {
+        result += e.getMessage();
+      }
+      close();
+      return result;
+    } else {
+      result += message;
+      return result;
+    }
+  }
+  // Business logic: Method to create html code for dropdown.  Lists options
+
+  public String dropdown(String sql) {
+    String result = "<option disabled selected>Select one ...</option>\n";
+    String message = open();
+    if (message.equals("Opened")) {
+      try {
+        rst = stm.executeQuery(sql);
+        rsmd = rst.getMetaData();
+        int count = rsmd.getColumnCount();
+        while (rst.next()) {
+          result += "<option value='" + rst.getInt(1) + "'>";
+          for (int i = 2; i <= count; i++) {
+            result += rst.getString(i) + " ";
+          }
+          result += "</option>\n";
+        }
+        message = close();
         return result;
       } catch (Exception e) {
         return e.getMessage();
