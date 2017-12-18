@@ -21,14 +21,12 @@
       if (result.equals("Admin")) {
         session.setAttribute("logged", "admin");
         response.sendRedirect("adminsettings.jsp");
-      } else if (result.startsWith("Error: ")) {
+      } else if (result.startsWith("Error")) {
         session.setAttribute("logged", "index");
         response.sendRedirect("index.jsp");
       } else {
-        int atPos = email.indexOf('@');
-        email = email.substring(0, atPos);
         session.setAttribute("logged", email);
-        response.sendRedirect("welcome.jsp");
+        response.sendRedirect("properties.jsp");
       }
     %>
     </body>

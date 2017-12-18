@@ -8,10 +8,11 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <%@include file="header.jsp" %>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <title>Attic Properties</title>
     </head>
     <body>
-        <h1>Hello World!</h1>
+        <h1>Your Properties Here Soon</h1>
     </body>
 </html>

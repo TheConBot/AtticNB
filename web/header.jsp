@@ -10,6 +10,11 @@
     </head>
 
     <body>
+        <% // session control
+        String logged = (String)session.getAttribute("logged");
+        if(logged == null){
+            response.sendRedirect("index.jsp");
+        }
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
             <a class="navbar-brand"href="#"><img src="logo.png"></a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
@@ -18,9 +23,6 @@
 
             <div class="collapse navbar-collapse" id="navbarNavDropdown">
                 <ul class="navbar-nav mr-auto">
-                    <li class="nav-item active">
-                        <a class="nav-link" href="#">Home</a>
-                    </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">Properties</a>
                     </li>
@@ -29,24 +31,15 @@
                         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                             <a class="dropdown-item" href="#">Property Settings</a>
                             <a class="dropdown-item" href="#">User Settings</a>
-                            <a class="dropdown-item" href="#" id="adminsettings">Admin Settings</a>                        
-                            <a class="dropdown-item" href="#">Log Out</a>
+                            <a class="dropdown-item" href="adminsettings.jsp" id="adminsettings">Admin Settings</a>                        
+                            <a class="dropdown-item" href="logoutAction.jsp">Log Out</a>
                         </div>
                     </li>
                 </ul>
             </div>
-            <form class="form-inline input-padding">
-                <div class="input-group">
-                    <span class="input-group-addon" id="basic-addon1">Username</span>
-                    <input type="text" class="form-control" placeholder="" aria-label="Username" aria-describedby="basic-addon1">
-                </div>
-            </form>
-            <form class="form-inline input-padding">
-                <div class="input-group">
-                    <span class="input-group-addon" id="basic-addon1">Password</span>
-                    <input type="password" class="form-control" placeholder="" aria-label="Username" aria-describedby="basic-addon1">
-                </div>
-            </form>
-             <button type="submit" class="btn btn-default input-padding">Submit</button>
+            <div id="logout" class="header-welcome">
+                <label >Logged in as, </label>
+                <%= logged %>
+            </div>
         </nav>
     </body>

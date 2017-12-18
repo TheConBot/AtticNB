@@ -12,8 +12,13 @@
         <script  type="text/javascript" src="validate.js"></script>
     </head>
     <body>
-        <form name="register" action="action.jsp" method="get" class="cover body-left">
-            <h1>Register a New Account</h1>
+        <%
+            if (!logged.equals("admin")) {
+                response.sendRedirect("index.jsp");
+            }
+        %>
+        <form name="register" action="createAccountAction.jsp" method="get" class="cover body-left">
+            <h1>Create a New Account</h1>
             <div class="form-group">
               <label>First Name</label>
               <input type="text" name="fname" class="form-control" placeholder="John">
@@ -70,7 +75,7 @@
             </fieldset>
             <div class="form-check">
               <label class="form-check-label">
-                  <input type="checkbox" class="form-check-input" name="notifications">
+                  <input type="checkbox" class="form-check-input " name="notifications">
                 Email Notifications
               </label>
             </div>
