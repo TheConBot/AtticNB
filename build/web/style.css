@@ -61,10 +61,8 @@
 }
 
 .header-welcome{
-    position:relative;
-    right: 20px;
+    right: 40px;
     color:white;
-    text-align: center;
-    display:inline;
+    text-align: right;
 }
 

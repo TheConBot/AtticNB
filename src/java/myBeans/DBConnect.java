@@ -5,35 +5,34 @@
  */
 package myBeans;
 
-import java.sql.*;
+import com.google.gson.Gson;
+import org.apache.commons.dbutils.DbUtils;
+import org.apache.commons.dbutils.QueryRunner;
+import org.apache.commons.dbutils.handlers.MapListHandler;
 
-/**
- *
- * @author nmahadev
- */
+import java.sql.*;
+import java.util.*;
+
 public class DBConnect {
 
-  // driver and connection string variables
   private final String driver = "com.mysql.jdbc.Driver";
   private final String url = "jdbc:mysql://localhost:3306/attic";
   private final String user = "mahadev";
   private final String pwd = "mahadev";
 
-  // JDBC variables and methods
   private Connection conn = null;
   private Statement stm = null;
   private PreparedStatement pstm = null;
   private ResultSet rst = null;
   private ResultSetMetaData rsmd = null;
 
-  // The two private methods below are used to open and close DB
   private String open() {
     String message = "Opened";
     try {
       Class.forName(driver); // load driver
       conn = DriverManager.getConnection(url, user, pwd);
       stm = conn.createStatement();
-    } catch (Exception e) {
+    } catch (ClassNotFoundException | SQLException e) {
       message = e.getMessage();
     }
     return message;
@@ -44,61 +43,46 @@ public class DBConnect {
     try {
       stm.close();
       conn.close();
-    } catch (Exception e) {
+    } catch (SQLException e) {
       message = e.getMessage();
     }
     return message;
   }
 
-  // Business logic: Method to insert data
   public String insertData(String sql) {
     String message = open();
     if (message.equals("Opened")) {
       try {
         stm.executeUpdate(sql);
         message = close();
-      } catch (Exception e) {
+      } catch (SQLException e) {
         message = e.getMessage();
       }
     }
     return message;
   }
-
-  // Business logic: Method to display query as html table
-  public String htmlTable(String sql) {
-    String result = "<table>\n";
-    String message = open();
-    if (message.equals("Opened")) {
-      try {
-        rst = stm.executeQuery(sql);
-        rsmd = rst.getMetaData();
-        int count = rsmd.getColumnCount();
-        // create column headings
-        result += "<tr>\n";
-        for (int i = 0; i < count; i++) {
-          result += "<th>" + rsmd.getColumnName(i + 1) + "</th>\n";
-        }
-        result += "</tr>\n";
-        // create data rows
-        while (rst.next()) {
-          result += "<tr>\n";
-          for (int i = 0; i < count; i++) {
-            result += "<td>" + rst.getString(i + 1) + "</td>\n";
-          }
-          result += "</tr>\n";
-        }
-        result += "</table>\n";
-        message = close();
-        return result;
-      } catch (Exception e) {
-        return e.getMessage();
-      }
-    } else {
-      return message;
-    }
+  
+  public String getProperties(){
+      String query = "SELECT properties.Nickname, address.`House Number`, address.`Street Name`, address.`Street Suffix`, address.City, address.State, address.`Zip Code`, properties.Floors FROM properties JOIN address ON properties.`House ID` = address.`House ID`";
+      return resultSetToJson(query);
   }
-
-  // Business logic: Method to verify password. Avoids SQL injection
+  
+  public String resultSetToJson(String query) {
+        List<Map<String, Object>> listOfMaps = null;
+        String message = open();
+        if (message.equals("Opened")) {
+            try {
+                QueryRunner queryRunner = new QueryRunner();
+                listOfMaps = queryRunner.query(conn, query, new MapListHandler());
+            } catch (SQLException se) {
+                throw new RuntimeException("Couldn't query the database.", se);
+            } finally {
+                DbUtils.closeQuietly(conn);
+            }
+        }
+        return new Gson().toJson(listOfMaps);
+    }
+  
   public String isPwdValid(String sql, String user, String pwd) {
     String result = "Error: ";
     String message = open();
@@ -111,7 +95,7 @@ public class DBConnect {
         if (rst.next()) {
           result = rst.getString(3);
         }
-      } catch (Exception e) {
+      } catch (SQLException e) {
         result += e.getMessage();
       }
       close();
@@ -119,32 +103,6 @@ public class DBConnect {
     } else {
       result += message;
       return result;
-    }
-  }
-  // Business logic: Method to create html code for dropdown.  Lists options
-
-  public String dropdown(String sql) {
-    String result = "<option disabled selected>Select one ...</option>\n";
-    String message = open();
-    if (message.equals("Opened")) {
-      try {
-        rst = stm.executeQuery(sql);
-        rsmd = rst.getMetaData();
-        int count = rsmd.getColumnCount();
-        while (rst.next()) {
-          result += "<option value='" + rst.getInt(1) + "'>";
-          for (int i = 2; i <= count; i++) {
-            result += rst.getString(i) + " ";
-          }
-          result += "</option>\n";
-        }
-        message = close();
-        return result;
-      } catch (Exception e) {
-        return e.getMessage();
-      }
-    } else {
-      return message;
     }
   }
 }
