@@ -20,7 +20,7 @@
       String result = dbConnect.isPwdValid(sql, email, pwd);
       if (result.equals("Admin")) {
         session.setAttribute("logged", "admin");
-        response.sendRedirect("adminsettings.jsp");
+        response.sendRedirect("properties.jsp");
       } else if (result.startsWith("Error")) {
         session.setAttribute("logged", "index");
         response.sendRedirect("index.jsp");
